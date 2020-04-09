@@ -11,6 +11,7 @@ var MongoStore = require('connect-mongo');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var pharmarciesRouter = require('./routes/pharmacies');
+var cors = require('cors')
 
 var app = express();
 // view engine setup
@@ -19,6 +20,7 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors())
 app.use(cookieParser());
 app.use(sassMiddleware({
   src: path.join(__dirname, 'public'),
@@ -30,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/pharmacies', pharmarciesRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -44,5 +47,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 module.exports = app;
 

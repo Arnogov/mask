@@ -1,11 +1,27 @@
 var express = require('express');
 var router = express.Router();
-var Pharmacies = require('../models/Pharmacies');
+var Pharmacy = require('../models/Pharmacies');
 
 
 router.get('/', (req, res) => {
-    Pharmacies.find().populate('user').exec((err, pharmacies) => {
-        res.render('pharmacies/show', { title: 'Les pharmacies', Pharmacies: pharmacies });
+    Pharmacy.find().populate('user').exec((err, pharmacies) => {
+        res.json(pharmacies);
+    });
+});
+
+router.post('/', (req, res) => {
+    const pharmacy = new Pharmacy({
+        name: req.body.name,
+        address: req.body.address,
+        geometry: {
+            type: 'Point',
+            coordinates: [req.body.longitude, req.body.latitude]
+        },
+        mask: req.body.mask
+    });
+    pharmacy.save((err, newPharmacy) => {
+        if (err) return res.json(err);
+        res.json(newPharmacy);
     });
 });
 
